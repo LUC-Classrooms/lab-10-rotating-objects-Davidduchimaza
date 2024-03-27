@@ -6,7 +6,7 @@ Study the example posted this week under rotating objects and reconstruct some o
 Specifically, add some code to the display() method that will create a new layer, translate to the correct x/y location, and rotate the image by the value of this.angle
 */
 
-var obj1, obj2; // create variables to contain objects
+var obj1, obj2; // create global variables to contain objects
 
 function setup() {
   createCanvas(400, 300);
@@ -32,15 +32,14 @@ function draw() {
 
   if(mouse1 < 50) { // first, see if the mouse is within range
     if(mouseIsPressed){
-      // spin object 1 by calling its spin() method
-      // you will have to create that method inside the myClass constructor ...
+      obj1.spin(-0.03); // spin object 1 by calling its spin() method
     } else {
       obj1.reset(); // the reset function is done for you
     }
   }
   if(mouse2 < 50) {
     if(mouseIsPressed){
-      // spin object 2 by calling its spin() method
+      obj2.spin(0.06); // spin object 2 by calling its spin() method
     } else {
       obj2.reset();
     }
@@ -55,15 +54,19 @@ function myClass(tempX, tempY){
   this.diam = 100; // fixed diameter
   this.xSpeed = 1; // fixed horizontal speed
   this.ySpeed = 1; // fixed vertical speed
-  this.angle = 0; // angle of rotation; intially 0
+  this.angle = 0; // angle of rotation; initially 0
   this.scale = 1; // scale factor; initially 1 (full size)
   // pick a random color: 
-  this.color = color(random(255), random(255), random(255));
+  this.color = color(random(100, 255), random(100, 255), random(100, 255)); // Adjusted color range
   
   /*
   Create a spin method here. Look at the reset() method below and the spin() method from the Sakai example for this week.
   the function assigned to this.spin should take a number argument; that number should be _added_ to the value of this.angle. The reset() method sets this.angle back to 0, and this.scale back to 1
   */
+ this.spin = function(a){
+  this.angle += a;
+  this.scale *= 0.99;
+ }
   
   this.reset = function(){
       this.angle = 0;
@@ -78,12 +81,15 @@ function myClass(tempX, tempY){
   
   The argument to rotate() should be "this.angle", which is affected by the spin() and reset() methods
 */
-    
+    push();
+    translate(this.x, this.y)
+    rotate(this.angle);
+    scale(this.scale)
     fill(this.color);
     rectMode(CENTER);
     // change the location to 0, 0
-    rect(this.x, this.y, this.diam, this.diam);
-    
+    rect(0, 0, this.diam, this.diam);
+    pop();
   }
   
 }
